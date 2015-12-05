@@ -4,9 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.protobuf.ProtobufHttpMessageConverter;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
@@ -78,4 +81,19 @@ class CustomerRestController {
     CustomerProtos.Customer customer(@PathVariable Integer id) {
         return this.customerRepository.findById(id);
     }
+
+
+    @RequestMapping(value = "/proto/write1",method= RequestMethod.POST)
+    public ResponseEntity<CustomerProtos.Customer> protoWrite1(RequestEntity<CustomerProtos.Customer> requestEntity) {
+        //System.out.println("server===\n");
+        CustomerProtos.Customer user =  requestEntity.getBody();
+        user =CustomerProtos.Customer.newBuilder()
+                        .setFirstName(user.getFirstName()+"server")
+                        .setLastName(user.getLastName()+"server")
+                        .setId(3)
+                        .build() ;
+        System.out.println("server===\n" + user);
+        return ResponseEntity.ok(user);
+    }
+
 }
