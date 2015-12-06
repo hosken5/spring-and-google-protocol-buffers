@@ -1,3 +1,4 @@
+syntax = "proto2";
 package demo;
 
 option java_package = "demo";
